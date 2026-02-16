@@ -7,10 +7,9 @@ import g1 from './assets/g1.jpg'
 import g2 from './assets/g2.jpg'
 import g3 from './assets/g3.jpg'
 import g4 from './assets/g4.jpg'
-import g5 from './assets/g5.jpg'
 import './App.css'
 
-const GALLERY_IMAGES = [g1, g2, g3, g4, g5]
+const GALLERY_IMAGES = [g1, g2, g3]
 
 // Direct video URLs from Cloudinary
 const TIKTOK_PROFILE_URL = 'https://www.tiktok.com/@leothehomelesstort'
@@ -31,12 +30,22 @@ function App() {
   const [chartLoaded, setChartLoaded] = useState(false)
   const [copied, setCopied] = useState(false)
   const tiktokScrollRef = useRef(null)
+  const videoRefs = useRef([])
 
   const scrollTiktok = useCallback((direction) => {
     const el = tiktokScrollRef.current
     if (!el) return
     const step = Math.min(380, el.offsetWidth * 0.95)
     el.scrollBy({ left: direction === 'next' ? step : -step, behavior: 'smooth' })
+  }, [])
+
+  const handleVideoPlay = useCallback((currentIndex) => {
+    // Pause all other videos except the one that's playing
+    videoRefs.current.forEach((videoRef, index) => {
+      if (videoRef && index !== currentIndex && !videoRef.paused) {
+        videoRef.pause()
+      }
+    })
   }, [])
 
 
@@ -272,12 +281,16 @@ function App() {
               {TIKTOK_VIDEOS.map((url, i) => (
                 <div key={i} className="tiktok-slider-slide">
                   <video
+                    ref={(el) => {
+                      videoRefs.current[i] = el
+                    }}
                     className="tiktok-video"
                     src={url}
                     controls
                     playsInline
                     preload="metadata"
                     style={{ maxWidth: '605px', minWidth: '325px' }}
+                    onPlay={() => handleVideoPlay(i)}
                   >
                     Your browser does not support the video tag.
                   </video>
