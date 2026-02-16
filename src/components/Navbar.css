@@ -1,0 +1,198 @@
+/* Fiery Navbar — $LEO */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: linear-gradient(180deg, rgba(20, 8, 4, 0.98) 0%, rgba(12, 5, 2, 0.95) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  box-shadow:
+    0 0 0 1px rgba(255, 100, 50, 0.08),
+    0 4px 24px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 140, 60, 0.06);
+}
+
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 1rem;
+}
+
+/* Logo $LEO */
+.navbar-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  text-decoration: none;
+  position: relative;
+  outline: none;
+}
+
+.navbar-logo:focus-visible {
+  outline: 2px solid var(--fire-mid);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.navbar-logo-text {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: clamp(1.75rem, 5vw, 2.25rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  background: linear-gradient(180deg, #fff 0%, #ffb366 35%, #ff8533 60%, #ff6622 80%, #e63900 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 100% 200%;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 0 40px rgba(255, 100, 30, 0.4);
+  transition: filter 0.25s ease, transform 0.2s ease;
+}
+
+.navbar-logo:hover .navbar-logo-text {
+  filter: brightness(1.15);
+  transform: scale(1.02);
+}
+
+.navbar-logo-glow {
+  position: absolute;
+  inset: -8px -12px;
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(255, 80, 20, 0.2), transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.navbar-logo:hover .navbar-logo-glow {
+  opacity: 1;
+}
+
+/* Fire palette (used in navbar) */
+.navbar {
+  --fire-dark: #1a0804;
+  --fire-mid: #ff6622;
+  --fire-bright: #ffb366;
+  --fire-glow: rgba(255, 100, 30, 0.35);
+}
+
+/* Flame bar under navbar */
+.navbar-flame-bar {
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 80, 20, 0.2) 15%,
+    rgba(255, 120, 40, 0.6) 35%,
+    rgba(255, 180, 80, 0.8) 50%,
+    rgba(255, 120, 40, 0.6) 65%,
+    rgba(255, 80, 20, 0.2) 85%,
+    transparent 100%
+  );
+  opacity: 0.9;
+  animation: flame-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes flame-shimmer {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* Action buttons */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 10px;
+  color: #f4f4f5;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  outline: none;
+}
+
+.navbar-btn:hover {
+  color: #fff;
+  background: rgba(255, 100, 40, 0.2);
+  border-color: rgba(255, 120, 50, 0.4);
+  box-shadow: 0 0 20px var(--fire-glow);
+  transform: scale(1.05);
+}
+
+.navbar-btn:focus-visible {
+  outline: 2px solid var(--fire-mid);
+  outline-offset: 2px;
+}
+
+.navbar-btn svg,
+.navbar-btn-img {
+  width: 1.25rem;
+  height: 1.25rem;
+  object-fit: contain;
+}
+
+.navbar-btn-dex:hover {
+  color: #ffb366;
+}
+
+.navbar-btn-x:hover {
+  color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .navbar-inner {
+    padding: 0.6rem 1rem;
+  }
+
+  .navbar-logo-text {
+    letter-spacing: 0.05em;
+  }
+
+  .navbar-btn {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .navbar-btn svg,
+  .navbar-btn .navbar-btn-img {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .navbar-inner {
+    padding: 0.875rem 1.5rem;
+  }
+
+  .navbar-actions {
+    gap: 0.75rem;
+  }
+
+  .navbar-btn {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .navbar-btn svg,
+  .navbar-btn .navbar-btn-img {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+}

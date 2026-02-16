@@ -1,0 +1,230 @@
+/* Footer — fire theme + footer.jpg background */
+.footer {
+  --fire-dark: #1a0804;
+  --fire-mid: #ff6622;
+  --fire-bright: #ffb366;
+  --fire-glow: rgba(255, 100, 30, 0.4);
+}
+
+.footer {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 280px;
+  background-color: #0d0502;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-top: 1px solid rgba(255, 80, 20, 0.15);
+  overflow: hidden;
+}
+
+/* Dark fiery overlay so content is readable */
+.footer-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(20, 6, 2, 0.92) 0%,
+    rgba(15, 5, 2, 0.95) 40%,
+    rgba(12, 4, 2, 0.98) 100%
+  );
+  pointer-events: none;
+}
+
+/* Flame accent line on top */
+.footer-flame-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 60, 20, 0.3) 20%,
+    rgba(255, 120, 50, 0.8) 50%,
+    rgba(255, 60, 20, 0.3) 80%,
+    transparent 100%
+  );
+  opacity: 0.9;
+  animation: footer-flame-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes footer-flame-pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.footer-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Logo */
+.footer-logo {
+  display: inline-block;
+  text-decoration: none;
+  margin-bottom: 0.25rem;
+  outline: none;
+}
+
+.footer-logo:focus-visible {
+  outline: 2px solid var(--fire-mid);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.footer-logo-text {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  background: linear-gradient(180deg, #fff 0%, #ffb366 30%, #ff8533 60%, #ff6622 85%, #e63900 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: filter 0.2s ease;
+}
+
+.footer-logo:hover .footer-logo-text {
+  filter: brightness(1.2);
+}
+
+.footer-tagline {
+  font-size: 0.9rem;
+  color: rgba(255, 180, 120, 0.9);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Link buttons — DexScreener & X */
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #f4f4f5;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  outline: none;
+}
+
+.footer-link:hover {
+  color: #fff;
+  background: rgba(255, 100, 40, 0.25);
+  border-color: rgba(255, 120, 50, 0.5);
+  box-shadow: 0 0 24px var(--fire-glow);
+  transform: translateY(-2px);
+}
+
+.footer-link:focus-visible {
+  outline: 2px solid var(--fire-mid);
+  outline-offset: 2px;
+}
+
+.footer-link-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  object-fit: contain;
+}
+
+.footer-link svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+.footer-link-dex:hover {
+  color: #ffb366;
+}
+
+.footer-link-x:hover {
+  color: #fff;
+}
+
+.footer-copy {
+  font-size: 0.8rem;
+  color: rgba(255, 200, 150, 0.5);
+  margin: 0;
+}
+
+/* Bottom flame bar */
+.footer-flame-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 80, 20, 0.25) 20%,
+    rgba(255, 140, 60, 0.7) 50%,
+    rgba(255, 80, 20, 0.25) 80%,
+    transparent 100%
+  );
+  opacity: 0.85;
+  animation: footer-flame-pulse 2.5s ease-in-out infinite 0.3s;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .footer {
+    min-height: 260px;
+  }
+
+  .footer-inner {
+    padding: 2rem 1rem 1.75rem;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .footer-link {
+    width: 100%;
+    max-width: 200px;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 768px) {
+  .footer {
+    min-height: 320px;
+  }
+
+  .footer-inner {
+    padding: 3rem 2rem 2.5rem;
+  }
+
+  .footer-links {
+    gap: 1rem;
+  }
+}
