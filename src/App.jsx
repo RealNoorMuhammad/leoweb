@@ -29,6 +29,7 @@ const DEXSCREENER_EMBED_URL =
 function App() {
   const [toastVisible, setToastVisible] = useState(false)
   const [chartLoaded, setChartLoaded] = useState(false)
+  const [copied, setCopied] = useState(false)
   const tiktokScrollRef = useRef(null)
 
   const scrollTiktok = useCallback((direction) => {
@@ -39,12 +40,89 @@ function App() {
   }, [])
 
 
-  const copyAddress = useCallback(async () => {
+  const copyAddress = useCallback(async (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
     try {
-      await navigator.clipboard.writeText(CONTRACT_ADDRESS)
-    } finally {
-      setToastVisible(true)
-      setTimeout(() => setToastVisible(false), 3000)
+      // Try modern clipboard API first
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(CONTRACT_ADDRESS)
+        setCopied(true)
+        setToastVisible(true)
+        setTimeout(() => {
+          setToastVisible(false)
+          setCopied(false)
+        }, 3000)
+      } else {
+        // Fallback for older browsers or non-secure contexts
+        const textArea = document.createElement('textarea')
+        textArea.value = CONTRACT_ADDRESS
+        textArea.style.position = 'fixed'
+        textArea.style.left = '-999999px'
+        textArea.style.top = '-999999px'
+        document.body.appendChild(textArea)
+        textArea.focus()
+        textArea.select()
+        
+        try {
+          const successful = document.execCommand('copy')
+          if (successful) {
+            setCopied(true)
+            setToastVisible(true)
+            setTimeout(() => {
+              setToastVisible(false)
+              setCopied(false)
+            }, 3000)
+          } else {
+            throw new Error('Copy command failed')
+          }
+        } catch (err) {
+          console.error('Failed to copy:', err)
+          // Still show toast even if copy fails
+          setToastVisible(true)
+          setTimeout(() => {
+            setToastVisible(false)
+          }, 3000)
+          alert('Failed to copy address. Please copy manually: ' + CONTRACT_ADDRESS)
+        } finally {
+          document.body.removeChild(textArea)
+        }
+      }
+    } catch (err) {
+      console.error('Failed to copy:', err)
+      // Fallback: try the old method
+      try {
+        const textArea = document.createElement('textarea')
+        textArea.value = CONTRACT_ADDRESS
+        textArea.style.position = 'fixed'
+        textArea.style.left = '-999999px'
+        textArea.style.top = '-999999px'
+        document.body.appendChild(textArea)
+        textArea.focus()
+        textArea.select()
+        const successful = document.execCommand('copy')
+        document.body.removeChild(textArea)
+        
+        if (successful) {
+          setCopied(true)
+          setToastVisible(true)
+          setTimeout(() => {
+            setToastVisible(false)
+            setCopied(false)
+          }, 3000)
+        } else {
+          throw new Error('Fallback copy failed')
+        }
+      } catch (fallbackErr) {
+        console.error('Fallback copy failed:', fallbackErr)
+        // Show toast anyway
+        setToastVisible(true)
+        setTimeout(() => {
+          setToastVisible(false)
+        }, 3000)
+        alert('Failed to copy address. Please copy manually: ' + CONTRACT_ADDRESS)
+      }
     }
   }, [])
 
@@ -75,25 +153,72 @@ function App() {
 
       <main className="main">
         <section className="hero">
-          <p className="hero-badge">$LEO Token</p>
-          <h1 className="hero-leo" aria-hidden="true">
-            <span className="hero-leo-dollar">$</span>
-            <span className="hero-leo-text">LEO</span>
-          </h1>
-        
+          {/* Floating particles background */}
+          <div className="hero-particles" aria-hidden="true">
+            <div className="hero-particle"></div>
+            <div className="hero-particle"></div>
+            <div className="hero-particle"></div>
+            <div className="hero-particle"></div>
+            <div className="hero-particle"></div>
+          </div>
+          
+          <div className="hero-container">
+            {/* Left Side - Text Content */}
+            <div className="hero-left">
+              <div className="hero-content">
+                <p className="hero-badge">
+                  <span className="hero-badge-icon">🔥</span>
+                  $LEO Token
+                </p>
+                <h1 className="hero-leo" aria-hidden="true">
+                  <span className="hero-leo-dollar">$</span>
+                  <span className="hero-leo-text">LEO</span>
+                </h1>
+                <p className="hero-subtitle">The Legendary Tortoise</p>
+              </div>
+            </div>
 
-          {/* CA — Contract Address */}
-          <div className="hero-ca">
-            <span className="hero-ca-label">CA — Contract Address</span>
-            <div className="hero-ca-box">
-              <code className="hero-ca-address">{CONTRACT_ADDRESS}</code>
+            {/* Right Side - Image */}
+            <div className="hero-right">
+              <div className="hero-image-wrapper">
+                <div className="hero-image-border"></div>
+                <img
+                  src={g4}
+                  alt="Leo the tortoise"
+                  className="hero-image"
+                  loading="eager"
+                  decoding="async"
+                />
+                <div className="hero-image-overlay" aria-hidden="true" />
+                <div className="hero-image-glow" aria-hidden="true" />
+                <div className="hero-image-shine" aria-hidden="true" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CA — Contract Address Section (Separate) */}
+        <section className="contract-address-section">
+          <div className="contract-address-container">
+            <span className="contract-address-label">CA — Contract Address</span>
+            <div className="contract-address-box">
+              <code className="contract-address-text">{CONTRACT_ADDRESS}</code>
               <button
                 type="button"
-                className="btn btn-copy"
+                className={`btn btn-copy ${copied ? 'btn-copy--copied' : ''}`}
                 onClick={copyAddress}
+                onMouseDown={(e) => e.preventDefault()}
                 aria-label="Copy contract address"
+                tabIndex={0}
               >
-                Copy Address
+                {copied ? (
+                  <>
+                    <span className="btn-copy-icon">✓</span>
+                    Copied!
+                  </>
+                ) : (
+                  'Copy Address'
+                )}
               </button>
             </div>
           </div>
@@ -232,7 +357,7 @@ function App() {
         aria-hidden={!toastVisible}
       >
         <span className="toast-icon">✓</span>
-        Address copied
+        <span className="toast-message">Address copied!</span>
       </div>
     </div>
   )
